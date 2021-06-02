@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="3a8b1452-0c0c-4d51-94fe-1b55e2d1ba51" created="3.5.0" activeEnvironment="Default" name="REST Project 1" updated="3.5.0 2020-11-11T18:12:01Z" encryptionMode="Not encrypted" abortOnError="false" runType="SEQUENTIAL" resourceRoot="${projectDir}" soapui-version="5.6.0" xmlns:con="http://eviware.com/soapui/config">
+  <con:settings/>
+  <con:interface xsi:type="con:RestService" id="0a844c10-1e44-4d7f-91cc-c71b43ba6b53" wadlVersion="http://wadl.dev.java.net/2009/02" name="Github Project" type="rest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <con:settings/>
+    
+    <con:definitionCache type="TEXT" rootPart=""/><con:endpoints>
+      <con:endpoint>https://api.github.com</con:endpoint>
+    </con:endpoints>
+    <con:resource name="Emails" path="/user/emails" id="62d46986-0135-4cdd-a949-356f729c5fc8">
+      <con:settings/>
+      <con:parameters/>
+      <con:method name="Emails" id="1749e8b4-8383-4e87-9d80-c9d3038e922b" method="GET">
+        <con:settings/>
+        <con:parameters/>
+        <con:representation type="RESPONSE">
+          <con:mediaType>application/json; charset=utf-8</con:mediaType>
+          <con:status>200</con:status>
+          <con:params/>
+          <con:element>Response</con:element>
+        </con:representation>
+        <con:request name="Request 1" id="e4589ef5-e1e2-454b-851b-df6dde8eefca" mediaType="application/json">
+          <con:settings>
+            <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+          </con:settings>
+          <con:endpoint>https://api.github.com</con:endpoint>
+          <con:request/>
+          <con:originalUri>https://api.github.com/user/emails</con:originalUri>
+          <con:credentials>
+            <con:selectedAuthProfile>GitHub</con:selectedAuthProfile>
+            <con:authType>OAuth 2.0</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:jmsPropertyConfig/><con:parameters/>
+        </con:request>
+      </con:method>
+    </con:resource>
+    <con:resource name="Keys" path="/user/keys" id="e7c7e64c-fe17-4391-ba69-63ca4e25b301">
+      <con:settings/>
+      <con:parameters/>
+      <con:method name="Keys" id="ecae5872-79be-4a36-bce0-81669fe44669" method="POST">
+        <con:settings/>
+        <con:parameters/>
+        <con:representation type="FAULT">
+          <con:mediaType>application/json; charset=utf-8</con:mediaType>
+          <con:status>400</con:status>
+          <con:params/>
+          <con:element xmlns:keys="https://api.github.com/user/keys">keys:Fault</con:element>
+        </con:representation>
+        <con:representation type="REQUEST">
+          <con:mediaType>application/json</con:mediaType>
+          <con:params/>
+        </con:representation>
+        <con:representation type="RESPONSE">
+          <con:mediaType>application/json; charset=utf-8</con:mediaType>
+          <con:status>201</con:status>
+          <con:params/>
+          <con:element xmlns:keys="https://api.github.com/user/keys">keys:Response</con:element>
+        </con:representation>
+        <con:request name="Request 1" id="002531bb-917e-45ff-bd0c-2b36df041566" mediaType="application/json" postQueryString="false">
+          <con:settings>
+            <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+          </con:settings>
+          <con:endpoint>https://api.github.com</con:endpoint>
+          <con:request/>
+          <con:credentials>
+            <con:selectedAuthProfile>GitHub</con:selectedAuthProfile>
+            <con:authType>OAuth 2.0</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:jmsPropertyConfig/><con:parameters/>
+        </con:request>
+      </con:method>
+    </con:resource>
+    <con:resource name="KeysKeyId" path="/user/keys/{KeyId}" id="715b241a-0e13-477f-a270-32bcbd0c439f">
+      <con:settings/>
+      <con:parameters>
+        <con:parameter>
+          <con:name>keyId</con:name>
+          <con:style>TEMPLATE</con:style>
+        </con:parameter>
+      </con:parameters>
+      <con:method name="keyID" id="e7ef0ff8-5411-4421-b71c-43bcf01ddace" method="DELETE">
+        <con:settings/>
+        <con:parameters>
+          <con:parameter required="true">
+            <con:name>KeyId</con:name>
+            <con:value>KeyId</con:value>
+            <con:style>TEMPLATE</con:style>
+            <con:default>KeyId</con:default>
+            <con:path xsi:nil="true"/>
+            <con:description xsi:nil="true"/>
+          </con:parameter>
+        </con:parameters>
+        <con:representation type="REQUEST">
+          <con:mediaType>application/json</con:mediaType>
+          <con:params/>
+        </con:representation>
+        <con:representation type="FAULT">
+          <con:mediaType>application/json; charset=utf-8</con:mediaType>
+          <con:status>404</con:status>
+          <con:params/>
+          <con:element xmlns:api="https://api.github.com/">api:Fault</con:element>
+        </con:representation>
+        <con:representation type="RESPONSE">
+          <con:mediaType xsi:nil="true"/>
+          <con:status>204</con:status>
+          <con:params/>
+          <con:element>data</con:element>
+        </con:representation>
+        <con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>204</con:status><con:params/><con:element>data</con:element></con:representation><con:request name="Request 1" id="2e669691-7f7d-4d1e-b0d9-6838a14bcccc" mediaType="application/json" postQueryString="false">
+          <con:settings>
+            <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+          </con:settings>
+          <con:endpoint>https://api.github.com</con:endpoint>
+          <con:request/>
+          <con:credentials>
+            <con:selectedAuthProfile>GitHub</con:selectedAuthProfile>
+            <con:authType>OAuth 2.0</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:jmsPropertyConfig/><con:parameters>
+            <con:entry key="KeyId" value="KeyId"/>
+          </con:parameters>
+          <con:parameterOrder>
+            <con:entry>KeyId</con:entry>
+          </con:parameterOrder>
+        </con:request>
+      </con:method>
+    </con:resource>
+  </con:interface>
+  <con:testSuite id="24f6356c-af99-4793-9627-3137855b2b3e" name="GitHub TestSuite">
+    <con:settings/>
+    <con:savedRecentRuns>1</con:savedRecentRuns>
+    <con:runType>SEQUENTIAL</con:runType>
+    <con:testCase id="f233e8ca-5566-4f7b-8cf1-d7bcc41a5f3d" discardOkResults="false" failOnError="true" failTestCaseOnErrors="true" keepSession="false" name="TestCase" searchProperties="true" timeout="0" maxResults="0">
+      <con:settings>
+        <con:setting id="IncludeOverview">true</con:setting>
+        <con:setting id="IncludeResults">true</con:setting>
+        <con:setting id="FlowLayout">false</con:setting>
+        <con:setting id="ErrorDetails">true</con:setting>
+        <con:setting id="IncludeCoverage">true</con:setting>
+        <con:setting id="GeneratableJUnitReport@Style">Single Page (Print)</con:setting>
+        <con:setting id="GeneratableJUnitReport@Folder">C:\Users\AkshitakumariKumari\Desktop\Training\SDET_API\GitHub Project</con:setting>
+      </con:settings>
+      <con:savedRecentRuns>1</con:savedRecentRuns>
+      <con:testStep type="restrequest" name="GET Request" id="84cf7627-979b-46b7-80f3-f727ee948b0e">
+        <con:settings/>
+        <con:config service="Github Project" resourcePath="/user/emails" methodName="Emails" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <con:restRequest name="GET Request" id="e4589ef5-e1e2-454b-851b-df6dde8eefca" mediaType="application/json">
+            <con:settings>
+              <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+            </con:settings>
+            <con:endpoint>https://api.github.com</con:endpoint>
+            <con:request/>
+            <con:originalUri>https://api.github.com/user/emails</con:originalUri>
+            <con:assertion type="Valid HTTP Status Codes" id="d2a98d13-5b12-4422-8b60-9c8ad5a436f6" name="Valid HTTP Status Codes">
+              <con:settings/>
+              <con:configuration>
+                <codes>200</codes>
+              </con:configuration>
+            </con:assertion>
+            <con:credentials>
+              <con:selectedAuthProfile>GitHub</con:selectedAuthProfile>
+              <con:authType>OAuth 2.0</con:authType>
+            </con:credentials>
+            <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+            <con:jmsPropertyConfig/><con:parameters/>
+          </con:restRequest>
+        </con:config>
+      </con:testStep>
+      <con:testStep type="restrequest" name="POST Request" id="43bd8aef-fec9-4ba4-89ae-3ad2f690450b">
+        <con:settings/>
+        <con:config service="Github Project" resourcePath="/user/keys" methodName="Keys" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <con:restRequest name="POST Request" id="002531bb-917e-45ff-bd0c-2b36df041566" mediaType="application/json" postQueryString="false">
+            <con:settings>
+              <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+            </con:settings>
+            <con:endpoint>https://api.github.com</con:endpoint>
+            <con:request>{
+	"title": "TestKey",
+	"key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCIDpebogYG+VMzdjtnBwnuCSAwg9sRDT9/3iQAn5bgQUVe1b1ulw0VCgNlnVFAauTDJel9GjeM+dz1vR2+uS3bLc5Sl03G0+7NoLZlF5/knLHI0MBwZV+iossmn+8wX6Cku3r4pHWVGmM7Av5hraVqgyZB+YW0/70asyGuoxszgNzDxGXvr1cEsZBCPeZcmGbF6gIF3ChAfViajevOQUTMKOvZbRMRJVXXRj/tEY+W1+jrCOznrJpE4wJTD/kXYui1h6RNoKtDC6Or0P06YodJgg15F4uWqVwDr9S6Sy65L+CiCt6HmG58t50IyJPfbOHonexJuG96K89BoXBpWggn"
+}</con:request>
+            <con:originalUri>https://api.github.com/user/keys</con:originalUri>
+            <con:assertion type="Valid HTTP Status Codes" id="813c56fd-b26b-43d1-8bcc-26ebad93ae71" name="Valid HTTP Status Codes">
+              <con:settings/>
+              <con:configuration>
+                <codes>200, 201</codes>
+              </con:configuration>
+            </con:assertion>
+            <con:credentials>
+              <con:selectedAuthProfile>GitHub</con:selectedAuthProfile>
+              <con:authType>OAuth 2.0</con:authType>
+            </con:credentials>
+            <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+            <con:jmsPropertyConfig/><con:parameters/>
+          </con:restRequest>
+        </con:config>
+      </con:testStep>
+      <con:testStep type="restrequest" name="DELETE Request" id="0e83fe58-6edc-454f-91f3-54f55ceaecb7">
+        <con:settings/>
+        <con:config service="Github Project" resourcePath="/user/keys/{KeyId}" methodName="keyID" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <con:restRequest name="DELETE Request" id="2e669691-7f7d-4d1e-b0d9-6838a14bcccc" mediaType="application/json" postQueryString="false">
+            <con:settings>
+              <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+            </con:settings>
+            <con:endpoint>https://api.github.com</con:endpoint>
+            <con:request/>
+            <con:originalUri>https://api.github.com/</con:originalUri>
+            <con:assertion type="Valid HTTP Status Codes" id="07e47e31-e14c-4abb-9fbf-f2a99c4b0dfa" name="Valid HTTP Status Codes">
+              <con:settings/>
+              <con:configuration>
+                <codes>200, 204</codes>
+              </con:configuration>
+            </con:assertion>
+            <con:credentials>
+              <con:selectedAuthProfile>GitHub</con:selectedAuthProfile>
+              <con:authType>OAuth 2.0</con:authType>
+            </con:credentials>
+            <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+            <con:jmsPropertyConfig/><con:parameters>
+              <con:entry key="KeyId" value="${POST Request#Response#$['id']}"/>
+            </con:parameters>
+            <con:parameterOrder>
+              <con:entry>KeyId</con:entry>
+            </con:parameterOrder>
+          </con:restRequest>
+        </con:config>
+      </con:testStep>
+      <con:properties/>
+      <con:reportParameters/>
+    </con:testCase>
+    <con:properties/>
+    <con:reportParameters/>
+  </con:testSuite>
+  <con:savedRecentRuns>1</con:savedRecentRuns>
+  <con:requirements/>
+  <con:properties/>
+  <con:wssContainer/>
+  <con:databaseConnectionContainer/>
+  <con:jmsConnectionContainer/>
+  <con:oAuth2ProfileContainer>
+    <con:oAuth2Profile>
+      <con:name>GitHub</con:name>
+      <con:type>OAuth 2.0</con:type>
+      <con:accessToken>removedtoken</con:accessToken>
+      <con:accessTokenPosition>HEADER</con:accessTokenPosition>
+      <con:accessTokenStatus>UNKNOWN</con:accessTokenStatus>
+      <con:accessTokenStartingStatus>ENTERED_MANUALLY</con:accessTokenStartingStatus>
+      <con:oAuth2Flow>AUTHORIZATION_CODE_GRANT</con:oAuth2Flow>
+      <con:refreshAccessTokenMethod>AUTOMATIC</con:refreshAccessTokenMethod>
+      <con:jwtConfiguration/>
+      <con:responseType>id_token</con:responseType>
+    </con:oAuth2Profile>
+  </con:oAuth2ProfileContainer>
+  <con:oAuth1ProfileContainer/>
+  <con:reporting>
+    <con:xmlTemplates/>
+    <con:parameters/>
+  </con:reporting>
+  <con:eventHandlers type="RequestFilter.filterRequest" name="RequestFilter.filterRequest">
+    <con:script>// Sample event script to add custom HTTP header to all outgoing REST, SOAP and HTTP(S) calls
+// This code is often used for adding custom authentication to ReadyAPI functional tests
+
+// If hardcoding the token, uncomment and change line 5
+// token = '4567'
+
+// If your token is parameterized in Project level custom property, uncomment line 8
+// token = request.parent.testCase.testSuite.project.getProperty('auth_token').getValue()
+
+// To modify all outgoing calls, remove comments from lines 11 to 16
+// headers = request.requestHeaders
+// if (headers.containsKey('auth_token2') == false) {
+//   headers.put('auth_token2', token)
+//   request.requestHeaders = headers
+// }</con:script>
+  </con:eventHandlers>
+  <con:eventHandlers type="TestRunListener.afterStep" name="TestRunListener.afterStep">
+    <con:script>// Save all test step results into files
+// Change the directory path in line 5 to a location where you want to store details
+// then uncomment lines 5 to 10
+
+// filePath = 'C:\\tempOutputDirectory\\'
+// fos = new java.io.FileOutputStream(filePath + testStepResult.testStep.label + '.txt', true)
+// pw = new java.io.PrintWriter(fos)
+// testStepResult.writeTo(pw)
+// pw.close()
+// fos.close()</con:script>
+  </con:eventHandlers>
+  <con:authRepository>
+    <con:oAuth20AuthEntry>
+      <con:name>GitHub</con:name>
+      <con:type>OAuth 2.0</con:type>
+      <con:accessToken/>
+      <con:accessTokenPosition>HEADER</con:accessTokenPosition>
+      <con:accessTokenStatus>ENTERED_MANUALLY</con:accessTokenStatus>
+      <con:accessTokenStartingStatus>ENTERED_MANUALLY</con:accessTokenStartingStatus>
+      <con:oAuth2Flow>AUTHORIZATION_CODE_GRANT</con:oAuth2Flow>
+      <con:refreshAccessTokenMethod>AUTOMATIC</con:refreshAccessTokenMethod>
+      <con:jwtConfiguration/>
+      <con:responseType>id_token</con:responseType>
+    </con:oAuth20AuthEntry>
+  </con:authRepository>
+  <con:tags/>
+</con:soapui-project>
