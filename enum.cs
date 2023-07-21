@@ -44,3 +44,20 @@ public void ConfigureServices(IServiceCollection services)
         options.ModelBinderProviders.Insert(0, new BinderTypeModelBinderProvider(typeof(Enum), new EnumModelBinder()));
     });
 }
+
+
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+
+public class EnumModelBinderProvider : IModelBinderProvider
+{
+    public IModelBinder? GetBinder(ModelBinderProviderContext context)
+    {
+        if (context.Metadata.ModelType.IsEnum)
+        {
+            return new EnumModelBinder();
+        }
+
+        return null;
+    }
+}
+
