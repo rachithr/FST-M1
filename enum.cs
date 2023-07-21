@@ -35,3 +35,12 @@ public class EnumModelBinder : IModelBinder
         return Task.CompletedTask;
     }
 }
+public void ConfigureServices(IServiceCollection services)
+{
+    // Other configurations
+
+    services.AddControllers(options =>
+    {
+        options.ModelBinderProviders.Insert(0, new BinderTypeModelBinderProvider(typeof(Enum), new EnumModelBinder()));
+    });
+}
