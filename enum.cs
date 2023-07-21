@@ -1,46 +1,32 @@
 using System;
-using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
-public class EnumValidationAttribute : ValidationAttribute
+public class StatusEnumConverter : JsonConverter<Status>
 {
-    private readonly Type _enumType;
-
-    public EnumValidationAttribute(Type enumType)
+    public override Status Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        _enumType = enumType;
+        var enumName = reader.GetString();
+        if (Enum.TryParse<Status>(enumName, ignoreCase: true, out var enumValue))
+        {
+            return enumValue;
+        }
+
+        return Status.None; // Or any default value for invalid cases
     }
 
-    public override bool IsValid(object value)
+    public override void Write(Utf8JsonWriter writer, Status value, JsonSerializerOptions options)
     {
-        if (value == null || !_enumType.IsEnum)
-        {
-            return false;
-        }
-
-        if (value is Enum enumValue)
-        {
-            return Enum.IsDefined(_enumType, enumValue);
-        }
-
-        return false;
+        writer.WriteStringValue(value.ToString());
     }
 }
-[ApiController]
-[Route("api/[controller]")]
-public class MyController : ControllerBase
+public void ConfigureServices(IServiceCollection services)
 {
-    [HttpPost]
-    public IActionResult MyAction([FromBody] MyRequestDTO request)
-    {
-        if (!ModelState.IsValid)
-        {
-            var errors = ModelState.Values
-                .SelectMany(v => v.Errors.Select(e => e.ErrorMessage))
-                .ToList();
+    // Other configurations
 
-            return BadRequest(errors);
-        }
-
-        // Your API logic here
-    }
+    services.AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new StatusEnumConverter());
+            });
 }
