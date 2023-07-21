@@ -1,36 +1,32 @@
 using System;
-using System.ComponentModel;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-public class EnumModelBinder : IModelBinder
+public class EnumMemberNameModelBinder<TEnum> : IModelBinder where TEnum : struct, Enum
 {
     public Task BindModelAsync(ModelBindingContext bindingContext)
     {
-        if (!typeof(Enum).IsAssignableFrom(bindingContext.ModelType))
-        {
-            bindingContext.Result = ModelBindingResult.Failed();
-            return Task.CompletedTask;
-        }
+        var modelName = bindingContext.ModelName;
+        var valueProviderResult = bindingContext.ValueProvider.GetValue(modelName);
 
-        var valueProviderResult = bindingContext.ValueProvider.GetValue(bindingContext.ModelName);
         if (valueProviderResult == ValueProviderResult.None)
         {
+            bindingContext.ModelState.AddModelError(modelName, "Value for enum is missing");
             bindingContext.Result = ModelBindingResult.Failed();
             return Task.CompletedTask;
         }
 
         var value = valueProviderResult.FirstValue;
-        if (Enum.TryParse(bindingContext.ModelType, value, ignoreCase: true, out var enumValue))
+        if (Enum.TryParse<TEnum>(value, ignoreCase: true, out var enumValue))
         {
-            if (Enum.IsDefined(bindingContext.ModelType, enumValue))
+            if (Enum.IsDefined(typeof(TEnum), enumValue))
             {
                 bindingContext.Result = ModelBindingResult.Success(enumValue);
                 return Task.CompletedTask;
             }
         }
 
-        bindingContext.ModelState.AddModelError(bindingContext.ModelName, "Invalid value for enum");
+        bindingContext.ModelState.AddModelError(modelName, "Invalid value for enum");
         bindingContext.Result = ModelBindingResult.Failed();
         return Task.CompletedTask;
     }
@@ -41,23 +37,6 @@ public void ConfigureServices(IServiceCollection services)
 
     services.AddControllers(options =>
     {
-        options.ModelBinderProviders.Insert(0, new BinderTypeModelBinderProvider(typeof(Enum), new EnumModelBinder()));
+        options.ModelBinderProviders.Insert(0, new BinderTypeModelBinderProvider(typeof(Status), new EnumMemberNameModelBinder<Status>()));
     });
 }
-
-
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-
-public class EnumModelBinderProvider : IModelBinderProvider
-{
-    public IModelBinder? GetBinder(ModelBinderProviderContext context)
-    {
-        if (context.Metadata.ModelType.IsEnum)
-        {
-            return new EnumModelBinder();
-        }
-
-        return null;
-    }
-}
-
