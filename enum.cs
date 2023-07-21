@@ -31,12 +31,26 @@ public class EnumMemberNameModelBinder<TEnum> : IModelBinder where TEnum : struc
         return Task.CompletedTask;
     }
 }
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+
+public class StatusEnumModelBinderProvider : IModelBinderProvider
+{
+    public IModelBinder GetBinder(ModelBinderProviderContext context)
+    {
+        if (context.Metadata.ModelType == typeof(Status))
+        {
+            return new EnumMemberNameModelBinder<Status>();
+        }
+
+        return null;
+    }
+}
 public void ConfigureServices(IServiceCollection services)
 {
     // Other configurations
 
     services.AddControllers(options =>
     {
-        options.ModelBinderProviders.Insert(0, new BinderTypeModelBinderProvider(typeof(Status), new EnumMemberNameModelBinder<Status>()));
+        options.ModelBinderProviders.Insert(0, new StatusEnumModelBinderProvider());
     });
 }
