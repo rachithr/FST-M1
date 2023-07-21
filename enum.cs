@@ -1,56 +1,46 @@
 using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.ComponentModel.DataAnnotations;
 
-public class EnumMemberNameModelBinder<TEnum> : IModelBinder where TEnum : struct, Enum
+public class EnumValidationAttribute : ValidationAttribute
 {
-    public Task BindModelAsync(ModelBindingContext bindingContext)
+    private readonly Type _enumType;
+
+    public EnumValidationAttribute(Type enumType)
     {
-        var modelName = bindingContext.ModelName;
-        var valueProviderResult = bindingContext.ValueProvider.GetValue(modelName);
+        _enumType = enumType;
+    }
 
-        if (valueProviderResult == ValueProviderResult.None)
+    public override bool IsValid(object value)
+    {
+        if (value == null || !_enumType.IsEnum)
         {
-            bindingContext.ModelState.AddModelError(modelName, "Value for enum is missing");
-            bindingContext.Result = ModelBindingResult.Failed();
-            return Task.CompletedTask;
+            return false;
         }
 
-        var value = valueProviderResult.FirstValue;
-        if (Enum.TryParse<TEnum>(value, ignoreCase: true, out var enumValue))
+        if (value is Enum enumValue)
         {
-            if (Enum.IsDefined(typeof(TEnum), enumValue))
-            {
-                bindingContext.Result = ModelBindingResult.Success(enumValue);
-                return Task.CompletedTask;
-            }
+            return Enum.IsDefined(_enumType, enumValue);
         }
 
-        bindingContext.ModelState.AddModelError(modelName, "Invalid value for enum");
-        bindingContext.Result = ModelBindingResult.Failed();
-        return Task.CompletedTask;
+        return false;
     }
 }
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-
-public class StatusEnumModelBinderProvider : IModelBinderProvider
+[ApiController]
+[Route("api/[controller]")]
+public class MyController : ControllerBase
 {
-    public IModelBinder GetBinder(ModelBinderProviderContext context)
+    [HttpPost]
+    public IActionResult MyAction([FromBody] MyRequestDTO request)
     {
-        if (context.Metadata.ModelType == typeof(Status))
+        if (!ModelState.IsValid)
         {
-            return new EnumMemberNameModelBinder<Status>();
+            var errors = ModelState.Values
+                .SelectMany(v => v.Errors.Select(e => e.ErrorMessage))
+                .ToList();
+
+            return BadRequest(errors);
         }
 
-        return null;
+        // Your API logic here
     }
-}
-public void ConfigureServices(IServiceCollection services)
-{
-    // Other configurations
-
-    services.AddControllers(options =>
-    {
-        options.ModelBinderProviders.Insert(0, new StatusEnumModelBinderProvider());
-    });
 }
