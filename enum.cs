@@ -1,25 +1,12 @@
-using System;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-
-public class StatusEnumConverter : JsonConverter<Status>
+public class MyRequestDto
 {
-    public override Status Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-    {
-        var enumName = reader.GetString();
-        if (Enum.TryParse<Status>(enumName, ignoreCase: true, out var enumValue))
-        {
-            return enumValue;
-        }
+    // Other properties
 
-        return Status.None; // Or any default value for invalid cases
-    }
-
-    public override void Write(Utf8JsonWriter writer, Status value, JsonSerializerOptions options)
-    {
-        writer.WriteStringValue(value.ToString());
-    }
+    [Required(ErrorMessage = "The Status field is required")]
+    public Status RequestStatus { get; set; }
 }
+
+
 public void ConfigureServices(IServiceCollection services)
 {
     // Other configurations
@@ -27,6 +14,25 @@ public void ConfigureServices(IServiceCollection services)
     services.AddControllers()
             .AddJsonOptions(options =>
             {
-                options.JsonSerializerOptions.Converters.Add(new StatusEnumConverter());
+                options.JsonSerializerOptions.PropertyNamingPolicy = null;
+                options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+            })
+            .ConfigureApiBehaviorOptions(options =>
+            {
+                options.InvalidModelStateResponseFactory = context =>
+                {
+                    var errors = context.ModelState.Values
+                        .SelectMany(modelState => modelState.Errors)
+                        .Select(error => error.ErrorMessage)
+                        .ToList();
+
+                    return new BadRequestObjectResult(new
+                    {
+                        Status = 400,
+                        Errors = errors
+                    });
+                };
             });
+
+    // Other configurations
 }
